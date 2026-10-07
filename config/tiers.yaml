@@ -1,0 +1,35 @@
+# Providers: any OpenAI-compatible endpoint. API keys are read from the named env var, never stored here.
+providers:
+  groq:
+    base_url: https://api.groq.com/openai/v1
+    api_key_env: GROQ_API_KEY
+  nvidia:
+    base_url: https://integrate.api.nvidia.com/v1
+    api_key_env: NVIDIA_API_KEY
+  openrouter:
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+
+# Tiers, CHEAPEST FIRST. The router tries them in this order and escalates only when the quality check fails.
+# The LAST tier is the "strongest": it is the escalation ceiling, the LLM-judge, and the benchmark baseline.
+# Run `python -m router check-models` to confirm every model id below exists for your key.
+tiers:
+  - name: small
+    provider: groq
+    model: openai/gpt-oss-20b
+    params: {reasoning_effort: low}      # forwarded to the API as extra_body
+  - name: strong
+    provider: groq
+    model: openai/gpt-oss-120b
+    params: {reasoning_effort: low}
+
+# Example of mixing providers (uncomment, set the key, then verify the id with `check-models`):
+#  - name: free-router
+#    provider: openrouter
+#    model: openrouter/free
+#  - name: nvidia-small
+#    provider: nvidia
+#    model: <model id from https://build.nvidia.com>
+
+# Be polite to free tiers: minimum seconds between calls to the same provider (0 = no throttle).
+min_interval_seconds: 0

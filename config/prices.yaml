@@ -1,0 +1,13 @@
+# Price per 1,000,000 tokens, in USD, keyed by "<provider>/<model>".
+#
+# These are PLACEHOLDERS (null). Fill them from each provider's own pricing page — this project
+# never guesses a price. Until a model's prices are filled in, cost for requests that used it is
+# reported as "not computed" (or raises MissingPriceError in strict mode).
+# A free tier is a real price: write 0.0 explicitly if the provider charges nothing.
+models:
+  groq/openai/gpt-oss-20b:
+    input_per_million: null      # fill from the provider's pricing page
+    output_per_million: null     # fill from the provider's pricing page
+  groq/openai/gpt-oss-120b:
+    input_per_million: null      # fill from the provider's pricing page
+    output_per_million: null     # fill from the provider's pricing page

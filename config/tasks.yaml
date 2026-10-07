@@ -1,0 +1,32 @@
+# One entry per task type. `check` picks how a tier's answer is judged before it is accepted.
+#   exact        answer (normalised) must equal one of `allowed` — or the request's own `expected`
+#   json_schema  answer must be valid JSON that validates against `schema`
+#   judge        the strongest tier grades the answer against `rubric` (skipped if the strongest tier answered)
+tasks:
+  classification:
+    system: >
+      You are a precise text classifier. Reply with exactly one label from the allowed set and nothing else:
+      no punctuation, no explanation.
+    max_tokens: 400
+    check: exact
+    allowed: [positive, negative, neutral, billing, technical, account, shipping, spam, not_spam]
+
+  extraction:
+    system: >
+      Extract the requested fields from the text. Reply with a single JSON object only — no markdown, no
+      commentary. Use null for anything the text does not state.
+    max_tokens: 600
+    check: json_schema
+    schema:
+      type: object
+      additionalProperties: true
+      minProperties: 1
+
+  short_qa:
+    system: >
+      Answer the question in one short sentence or phrase. If you are not sure, say you are not sure.
+    max_tokens: 400
+    check: judge
+    rubric: >
+      The answer must directly and correctly answer the question, be concise (at most two sentences), and must not
+      hedge, refuse, or invent details. Judge only factual correctness and responsiveness.

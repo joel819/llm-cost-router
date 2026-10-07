@@ -1,0 +1,6 @@
+openai==3.26.0
+fastapi==0.142.2
+uvicorn==0.54.0
+pydantic==2.13.5
+PyYAML==6.0.3
+jsonschema==4.26.0
