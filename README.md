@@ -60,7 +60,7 @@ prompt ──► cache? ──hit──► answer (cost 0)
 
 `benchmark/prompts.jsonl` holds 50 prompts with gold answers (17 classification, 17 extraction to JSON, 16 short factual Q&A). `python -m router bench` runs the strongest tier alone, then the router with a cold cache, then the router again (warm cache), and writes `report.md` / `report.json`. The committed [`docs/sample-report.md`](docs/sample-report.md) is **example output from one real run** (Groq only):
 
-- Pass rate vs the gold answers: 49/50 for both always-strongest and routed. The one miss is the same classification prompt in both modes.
+- Pass rate vs the gold answers: 49/50 for both always-strongest and routed. Each mode missed one classification prompt, and they were different prompts (`cla-15` for the baseline, `cla-06` for routed) — on a 50-prompt set that is run-to-run noise, not a difference between the modes.
 - **No prompt was escalated** — all 50 were answered and accepted by the cheap tier. So this run says nothing about how often escalation happens on harder workloads; escalation is covered by the mocked-provider tests instead.
 - **Routed used more tokens than the baseline** here (11,626 vs 7,993), because the 16 Q&A prompts each paid for an extra judge call on the strong model and nothing was escalated to save. Whether routing is cheaper in dollars depends on the tier price gap and the escalation rate, so the sample report leaves cost blank until you add real prices.
 - Second pass: 50/50 cache hits, 0 tokens.
